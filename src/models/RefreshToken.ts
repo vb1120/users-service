@@ -31,6 +31,13 @@ RefreshToken.init(
         },
         token: {
             type: DataTypes.STRING
+        },
+        userUuid: {
+            type: DataTypes.UUID,
+            references: {
+                model: User,
+                key: 'uuid'
+            }
         }
     },
     {
@@ -41,5 +48,5 @@ RefreshToken.init(
     }
 )
 
-User.hasOne(RefreshToken, { foreignKey: 'userUuid' })
-RefreshToken.belongsTo(User)
+User.hasOne(RefreshToken, { foreignKey: 'userUuid', sourceKey: 'uuid' })
+RefreshToken.belongsTo(User, { foreignKey: 'userUuid', targetKey: 'uuid' })

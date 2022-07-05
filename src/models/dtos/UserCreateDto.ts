@@ -18,5 +18,5 @@ export class UserCreateDto {
 
     @IsString()
     @Expose()
-    name: InferAttributes<User>['name']
+    name?: InferAttributes<User>['name']
 }
