@@ -1,5 +1,5 @@
 import { Request, Response } from 'express'
-import { RefreshToken, User, UserCreateDto } from '../models'
+import { User, UserCreateDto } from '../models'
 import { comparePasswords } from '../utils'
 import { IJwtPayload, JwtUtils } from '../utils/JwtUtils'
 import { bodyValidator, controller, post } from './decorators'
@@ -26,6 +26,9 @@ class AuthController {
 
         return res.status(201).send({ accessToken, refreshToken })
     }
+
+    @post('login')
+    @bodyValidator(UserCreateDto)
     async login(req: Request, res: Response) {
         const { email, password } = req.body
 
@@ -54,6 +57,29 @@ class AuthController {
 
         return res.status(200).send({ accessToken, refreshToken })
     }
-    async token(req: Request, res: Response) {}
+
+    @post('token')
+    async token(req: Request, res: Response) {
+        const { uuid, email } = req.payload
+
+        const user = await User.findOne({ where: { email } })
+
+        if (!user)
+            return res.status(404).send({
+                msg: `User with email ${email} is no longer available`
+            })
+
+        const refreshToken = await user.getRefreshToken()
+
+        if (!refreshToken || !refreshToken.token)
+            return res.status(401).send({ msg: 'Unauthorized' })
+
+        const accessToken = JwtUtils.generateAccessToken({
+            uuid,
+            email
+        })
+
+        return res.status(200).send({ accessToken })
+    }
     async logout(req: Request, res: Response) {}
 }
