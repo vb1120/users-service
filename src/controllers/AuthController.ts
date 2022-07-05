@@ -1,13 +1,13 @@
 import { Request, Response } from 'express'
-import { User } from '../models'
-import { post } from './decorators'
-import { controller } from './decorators/controller'
+import { User, UserCreateDto } from '../models'
+import { bodyValidator, controller, post } from './decorators'
 
 @controller('/')
 class AuthController {
     @post('signup')
+    @bodyValidator(UserCreateDto)
     async signup(req: Request, res: Response) {
-        const { email, password } = req.body
+        const { email } = req.body
 
         const user = await User.findOne({ where: { email } })
         if (user)

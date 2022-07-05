@@ -26,6 +26,12 @@ export function controller(prefix: string) {
                 key
             )
 
+            const dtoClassToValidate = Reflect.getMetadata(
+                MetadataKeys.validator,
+                target.prototype,
+                key
+            )
+
             // If function has path metadata key execute the routeHandler
             if (path) router[method](`${prefix}${path}`, routeHandler)
         }
