@@ -1,6 +1,6 @@
 import 'reflect-metadata'
 import { AppRouter } from '../../utils'
-import { asyncWrapp } from '../../middlewares'
+import { asyncWrapp, validateBody } from '../../middlewares'
 import { MetadataKeys } from './MetadataKeys'
 import { Methods } from './Methods'
 
@@ -33,7 +33,12 @@ export function controller(prefix: string) {
             )
 
             // If function has path metadata key execute the routeHandler
-            if (path) router[method](`${prefix}${path}`, routeHandler)
+            if (path)
+                router[method](
+                    `${prefix}${path}`,
+                    validateBody(dtoClassToValidate),
+                    routeHandler
+                )
         }
     }
 }

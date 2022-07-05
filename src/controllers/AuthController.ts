@@ -1,5 +1,7 @@
 import { Request, Response } from 'express'
-import { User, UserCreateDto } from '../models'
+import { RefreshToken, User, UserCreateDto } from '../models'
+import { comparePasswords } from '../utils'
+import { IJwtPayload, JwtUtils } from '../utils/JwtUtils'
 import { bodyValidator, controller, post } from './decorators'
 
 @controller('/')
@@ -24,7 +26,34 @@ class AuthController {
 
         return res.status(201).send({ accessToken, refreshToken })
     }
-    async login(req: Request, res: Response) {}
+    async login(req: Request, res: Response) {
+        const { email, password } = req.body
+
+        const user = await User.findOne({ where: { email } })
+        if (!user || !comparePasswords(password, user.password))
+            return res.status(401).send({ msg: `Invalid Credentials` })
+
+        const jwtPayload: IJwtPayload = { uuid: user.uuid, email }
+        const accessToken = JwtUtils.generateAccessToken(jwtPayload)
+        const savedRefreshToken = await user.getRefreshToken()
+
+        let refreshToken: string
+
+        if (!savedRefreshToken || !savedRefreshToken.token) {
+            refreshToken = JwtUtils.generateRefreshToken(jwtPayload)
+
+            if (!savedRefreshToken) {
+                await user.createRefreshToken({ token: refreshToken })
+            } else {
+                savedRefreshToken.token = refreshToken
+                await savedRefreshToken.save()
+            }
+        } else {
+            refreshToken = savedRefreshToken.token
+        }
+
+        return res.status(200).send({ accessToken, refreshToken })
+    }
     async token(req: Request, res: Response) {}
     async logout(req: Request, res: Response) {}
 }
