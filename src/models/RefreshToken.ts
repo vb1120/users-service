@@ -17,7 +17,7 @@ export class RefreshToken extends Model<
     // 'CreationOptional' is a special type that marks the field as optional
     // when creating an instance of the model (such as using Model.create()).
     declare id: CreationOptional<number>
-    declare token: string
+    declare token: string | null
     declare userUuid: ForeignKey<User['uuid']>
 }
 

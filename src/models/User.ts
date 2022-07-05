@@ -6,7 +6,8 @@ import {
     HasOneGetAssociationMixin,
     HasOneCreateAssociationMixin,
     HasOneSetAssociationMixin,
-    DataTypes
+    DataTypes,
+    Association
 } from 'sequelize'
 import { sequelize } from '../db'
 import { IJwtPayload, JwtUtils } from '../utils/JwtUtils'

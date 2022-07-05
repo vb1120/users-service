@@ -1,5 +1,5 @@
 import { Request, Response } from 'express'
-import { User, UserCreateDto } from '../models'
+import { RefreshToken, User, UserCreateDto } from '../models'
 import { comparePasswords } from '../utils'
 import { IJwtPayload, JwtUtils } from '../utils/JwtUtils'
 import { bodyValidator, controller, post } from './decorators'
@@ -81,5 +81,23 @@ class AuthController {
 
         return res.status(200).send({ accessToken })
     }
-    async logout(req: Request, res: Response) {}
+    async logout(req: Request, res: Response) {
+        const { email } = req.payload
+
+        const user = await User.findOne({
+            where: { email }
+        })
+
+        if (!user)
+            return res.status(404).send({
+                msg: `User with email ${email} is no longer available`
+            })
+
+        const refreshToken = await user.getRefreshToken()
+
+        refreshToken.token = null
+        await refreshToken.save()
+
+        return res.status(200).send({ msg: 'Successfully logged out' })
+    }
 }
