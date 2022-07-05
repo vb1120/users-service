@@ -8,7 +8,6 @@ export function controller(prefix: string) {
     return function (target: Function) {
         // Getting router instance from AppRouter Singleton
         const router = AppRouter.getInstance()
-
         // Iterating over every function of controller class's object
         for (let key of Object.getOwnPropertyNames(target.prototype)) {
             // Assigning the class object's function to a variable

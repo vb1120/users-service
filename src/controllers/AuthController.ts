@@ -1,5 +1,5 @@
 import { Request, Response } from 'express'
-import { RefreshToken, User, UserCreateDto } from '../models'
+import { User, UserCreateDto } from '../models'
 import { comparePasswords } from '../utils'
 import { IJwtPayload, JwtUtils } from '../utils/JwtUtils'
 import { bodyValidator, controller, post } from './decorators'
@@ -81,6 +81,8 @@ class AuthController {
 
         return res.status(200).send({ accessToken })
     }
+
+    @post('logout')
     async logout(req: Request, res: Response) {
         const { email } = req.payload
 

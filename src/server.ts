@@ -1,5 +1,6 @@
 import { initConnection, sequelize } from './db'
 import { startApp } from './startApp'
+import './controllers'
 
 initConnection(sequelize)
     .then(() => {
