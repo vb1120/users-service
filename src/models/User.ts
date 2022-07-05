@@ -82,3 +82,6 @@ User.init(
 User.beforeCreate(async (user, options) => {
     user.password = await hashPassword(user.password)
 })
+User.beforeUpdate(async (user, options) => {
+    user.password = await hashPassword(user.password)
+})

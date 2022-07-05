@@ -10,7 +10,8 @@ export const errorHandler = (
 
     console.log(err)
 
-    if (err.name === 'ValidationError') statusCode = 400
+    if (err.name === 'ValidationError' || err.name === 'SequelizeDatabaseError')
+        statusCode = 400
     else if ((err.name = 'SequelizeUniqueConstraintError')) statusCode = 409
     else statusCode = 500
 
