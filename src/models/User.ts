@@ -23,7 +23,7 @@ export class User extends Model<
     declare uuid: CreationOptional<string>
     declare email: string
     declare password: string
-    declare name: string
+    declare name: CreationOptional<string>
 
     // Since TS cannot determine model association at compile time
     // we have to declare them here purely virtually
