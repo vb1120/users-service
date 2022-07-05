@@ -1,10 +1,9 @@
-import { sequelize } from './db'
+import { initConnection, sequelize } from './db'
+import { RefreshToken } from './models/RefreshToken'
 import { startApp } from './startApp'
 
-sequelize
-    .authenticate()
+initConnection(sequelize)
     .then(() => {
-        console.log('Database connection established successfully')
         startApp()
     })
     .catch((err: Error) => console.log(err.message))
