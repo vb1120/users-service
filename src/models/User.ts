@@ -90,7 +90,7 @@ User.beforeUpdate(async (user, options) => {
 
 /*  
     When user after create hook is triggered it sends 
-    the user email to mailing service through message broker
+    the user email to mailing service through message broker queue
  */
 User.afterCreate(async (user, options) => {
     const messageBroker = await MessageBroker.getInstance()
@@ -103,5 +103,5 @@ User.afterCreate(async (user, options) => {
 
     await messageBroker.send('mailing', Buffer.from(JSON.stringify(jsonToSend)))
 
-    await messageBroker.close()
+    console.log('Message sent successfully')
 })
