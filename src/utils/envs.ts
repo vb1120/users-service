@@ -9,6 +9,7 @@ interface Env {
     jwtRefresh: string
     accessExpire: string
     refreshExpire: string
+    rabbitmqUri: string
 }
 
 export const envs: Env = {
@@ -19,5 +20,6 @@ export const envs: Env = {
     jwtAccess: <string>process.env.JWT_ACCESS,
     jwtRefresh: <string>process.env.JWT_REFRESH,
     accessExpire: <string>process.env.ACCESS_EXPIRE,
-    refreshExpire: <string>process.env.REFRESH_EXPIRE
+    refreshExpire: <string>process.env.REFRESH_EXPIRE,
+    rabbitmqUri: <string>process.env.RABBITMQ_URI
 }
