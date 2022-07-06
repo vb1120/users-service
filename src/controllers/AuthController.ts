@@ -1,8 +1,9 @@
 import { Request, Response } from 'express'
+import { authHandler, Tokens } from '../middlewares'
 import { User, UserCreateDto } from '../models'
 import { comparePasswords } from '../utils'
 import { IJwtPayload, JwtUtils } from '../utils/JwtUtils'
-import { bodyValidator, controller, post } from './decorators'
+import { bodyValidator, controller, post, use } from './decorators'
 
 @controller('/')
 class AuthController {
@@ -59,6 +60,7 @@ class AuthController {
     }
 
     @post('token')
+    @use(authHandler(Tokens.refreshToken))
     async token(req: Request, res: Response) {
         const { uuid, email } = req.payload
 
@@ -83,6 +85,7 @@ class AuthController {
     }
 
     @post('logout')
+    @use(authHandler())
     async logout(req: Request, res: Response) {
         const { email } = req.payload
 

@@ -41,7 +41,7 @@ export class User extends Model<
         }
 
         const accessToken = JwtUtils.generateAccessToken(jwtPayload)
-        const refreshToken = JwtUtils.generateAccessToken(jwtPayload)
+        const refreshToken = JwtUtils.generateRefreshToken(jwtPayload)
 
         return { accessToken, refreshToken }
     }

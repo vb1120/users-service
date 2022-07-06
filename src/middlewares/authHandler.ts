@@ -11,7 +11,8 @@ export const authHandler = (tokenType: string = Tokens.accessToken) => {
         const authHeader = req.headers.authorization
 
         if (authHeader) {
-            const token = authHeader.split('')[1]
+            const token = authHeader.split(' ')[1]
+
             try {
                 let jwtPayload: IJwtPayload
 
