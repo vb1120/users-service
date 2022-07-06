@@ -25,6 +25,13 @@ export function controller(prefix: string) {
                 key
             )
 
+            const middlewares =
+                Reflect.getMetadata(
+                    MetadataKeys.middleware,
+                    target.prototype,
+                    key
+                ) || []
+
             const dtoClassToValidate = Reflect.getMetadata(
                 MetadataKeys.validator,
                 target.prototype,
@@ -35,6 +42,7 @@ export function controller(prefix: string) {
             if (path)
                 router[method](
                     `${prefix}${path}`,
+                    ...middlewares,
                     validateBody(dtoClassToValidate),
                     routeHandler
                 )
